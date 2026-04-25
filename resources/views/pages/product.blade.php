@@ -7,7 +7,7 @@
                 class="w-12 h-12 flex items-center justify-center shrink-0 rounded-full overflow-hidden bg-white/10">
                 <img src="{{ asset('assets/images/icons/Arrow - Left.svg') }}" class="w-8 h-8" alt="icon">
             </a>
-            <p class="font-semibold text-white">Details</p>
+            <p class="font-semibold text-white">Detail Menu</p>
             <button
                 class="w-12 h-12 flex items-center justify-center shrink-0 rounded-full overflow-hidden bg-white/10">
                 <img src="{{ asset('assets/images/icons/Thumbs Up.svg') }}" class="w-[26px] h-[26px]" alt="">
@@ -35,7 +35,7 @@
                 </p>
             </div>
             <div id="Ingredients">
-                <h2 class="font-[500] mb-3">Ingredients used</h2>
+                <h2 class="font-[500] mb-3">Bahan-bahan</h2>
                 <div class="grid grid-cols-2 gap-3">
                     @foreach ($product->productIngredients as $productIngredient)
                         <div class="flex items-center gap-2">
@@ -46,7 +46,7 @@
                 </div>
             </div>
             <div id="Reviews">
-                <h2 class="font-[500] mb-3">Customer Reviews</h2>
+                <h2 class="font-[500] mb-3">Ulasan Pelanggan</h2>
 
                 @if(isset($reviews) && $reviews->count() > 0)
                 <div class="swiper w-full">
@@ -95,7 +95,7 @@
             <div class="flex items-center justify-between p-[20px]">
                 <div class="flex flex-col  gap-2">
                     <p class="text-[#606060] font-[400] text-[14px]">
-                        Menu Price
+                        Harga Menu
                     </p>
                     <p class="font-[600] text-[18px]">
                         Rp {{ number_format($product->price) }}
@@ -105,7 +105,7 @@
                 <button type="button"
                     class="flex justify-center rounded-full p-[14px_28px] bg-[#FF801A] font-normal text-white"
                     data-id="{{ $product->id }}" onclick="addToCart(this.dataset.id)">
-                    Add To Cart
+                    Tambah ke Keranjang
                 </button>
             </div>
         </div>

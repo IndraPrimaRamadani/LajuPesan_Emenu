@@ -25,10 +25,10 @@
                 @endif
 
                 {{-- Notification Dropdown --}}
-                <div id="notification-dropdown"
-                    class="hidden absolute right-0 top-12 w-max min-w-[150px] max-w-[250px] bg-white rounded-[12px] shadow-2xl z-50 overflow-hidden border border-[#F1F2F6]">
-                    <div class="max-h-[250px] overflow-y-auto">
-                        @if (isset($unratedTransactions) && $unratedTransactions->count() > 0)
+                @if (isset($unratedTransactions) && $unratedTransactions->count() > 0)
+                    <div id="notification-dropdown"
+                        class="hidden absolute right-0 top-12 w-max min-w-[150px] max-w-[250px] bg-white rounded-[12px] shadow-2xl z-50 overflow-hidden border border-[#F1F2F6]">
+                        <div class="max-h-[250px] overflow-y-auto">
                             @foreach ($unratedTransactions as $trx)
                                 <a href="{{ route('rating', ['username' => $store->username, 'transaction_code' => $trx->code]) }}"
                                     class="flex items-center gap-3 px-4 py-2 hover:bg-[#FFF7ED] border-b border-[#F1F2F6] transition-colors">
@@ -52,18 +52,9 @@
                                     </svg>
                                 </a>
                             @endforeach
-                        @else
-                            <div class="flex items-center justify-center gap-2 py-3 px-4">
-                                <svg class="w-5 h-5 text-[#ddd] shrink-0" fill="none" stroke="currentColor"
-                                    stroke-width="1.5" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-                                </svg>
-                                <p class="text-[#888] text-[11px] whitespace-nowrap">Tidak ada notifikasi</p>
-                            </div>
-                        @endif
+                        </div>
                     </div>
-                </div>
+                @endif
             </div>
         </div>
 
@@ -217,7 +208,9 @@
     <script>
         function toggleNotification() {
             const dropdown = document.getElementById('notification-dropdown');
-            dropdown.classList.toggle('hidden');
+            if (dropdown) {
+                dropdown.classList.toggle('hidden');
+            }
         }
 
         // Tutup dropdown ketika klik di luar
