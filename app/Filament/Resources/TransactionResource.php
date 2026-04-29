@@ -62,7 +62,7 @@ class TransactionResource extends Resource
                     ->readOnly()
                     ->required(),
                 Forms\Components\TextInput::make('name')
-                    ->label('Nama Costumer')
+                    ->label('Nama Pelanggan')
                     ->required(),
                 Forms\Components\TextInput::make('phone_number')
                     ->label('Nomor Telepon')
@@ -74,7 +74,7 @@ class TransactionResource extends Resource
                     ->label('Metode Pembayaran')
                     ->options([
                         'cash' => 'Tunai',
-                        'midtrans' => 'Midtrans'
+                        'midtrans' => 'Non Tunai'
                     ])
                     ->required(),
                 Forms\Components\Select::make('status')
@@ -131,23 +131,36 @@ class TransactionResource extends Resource
                 Tables\Columns\TextColumn::make('code')
                     ->label('Kode Transaksi'),
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Nama Costumer'),
+                    ->label('Nama Pelanggan'),
                 Tables\Columns\TextColumn::make('phone_number')
                     ->label('Nomor Telepon'),
                 Tables\Columns\TextColumn::make('table_number')
                     ->label('Nomer Meja'),
                 Tables\Columns\TextColumn::make('payment_method')
-                    ->label('Metode Pembayaran'),
+                    ->label('Metode Pembayaran')
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                        'cash' => 'Tunai',
+                        'midtrans' => 'Non Tunai',
+                        default => $state,
+                    }),
+
                 Tables\Columns\TextColumn::make('total_price')
                     ->label('Total Pembayaran')
                     ->formatStateUsing(function (string $state) {
                         return 'Rp' . number_format($state);
                     }),
                 Tables\Columns\TextColumn::make('status')
-                    ->label('Status Pembayaran'),
+                    ->label('Status Pembayaran')
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                        'pending' => 'Tertunda',
+                        'success' => 'Berhasil',
+                        'failed' => 'Gagal',
+                        default => $state,
+    }),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Tanggal Transaksi')
-                    ->dateTime(),
+                    ->dateTime('M d, Y H:i'),
 
             ])
             ->filters([

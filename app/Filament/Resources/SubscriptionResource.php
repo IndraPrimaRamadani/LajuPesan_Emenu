@@ -25,7 +25,12 @@ class SubscriptionResource extends Resource
 
     protected static ?string $navigationLabel = 'Langganan';
     protected static ?string $pluralModelLabel = 'Langganan';
+     protected static ?string $modelLabel = 'Langganan';
 
+    public static function canCreate(): bool
+    {
+        return Auth::user()->role !== 'admin';
+    }
 
     public static function getEloquentQuery(): Builder
     {
@@ -52,11 +57,13 @@ class SubscriptionResource extends Resource
                     ->hidden(fn() => Auth::user()->role === 'store'),
 
                 Forms\Components\Toggle::make('is_active')
+                    ->label('Status Aktif')
                     ->required()
                     ->hidden(fn() => Auth::user()->role === 'store'),
 
                 Forms\Components\Repeater::make('subscriptionPayment')
                     ->relationship()
+                    ->label('Pembayaran Langganan')
                     ->schema([
                         Forms\Components\FileUpload::make('proof')
                             ->label('Bukti Transfer Ke Rekening 5920185705 (BCA) A/N INDRA PRIMA RAMADANI Sebesar Rp. 50.000')
@@ -82,15 +89,16 @@ class SubscriptionResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->poll('5s')
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Nama Toko')
                     ->hidden(fn() => Auth::user()->role === 'store'),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->dateTime('M d, Y H:i')
                     ->label('Tanggal Mulai'),
                 Tables\Columns\TextColumn::make('end_date')
-                    ->dateTime()
+                    ->dateTime('M d, Y H:i')
                     ->label('Tanggal Berakhir'),
                 Tables\Columns\ImageColumn::make('subscriptionPayment.proof')
                     ->label('Bukti Pembayaran'),
@@ -112,12 +120,9 @@ class SubscriptionResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

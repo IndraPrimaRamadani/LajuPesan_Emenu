@@ -2,18 +2,18 @@
 
 @section('content')
     <div id="TopNav" class="relative flex items-center justify-between px-5 py-3 bg-white">
-            <a href="{{ route('product.find', $store->username) }}"
+            <a href="{{ route('index', $store->username) }}"
                 class="w-12 h-12 flex items-center justify-center shrink-0 rounded-full overflow-hidden bg-[#F0F1F3]">
                 <img src="{{ asset('assets/images/icons/Arrow - Left.svg') }}" class="w-[28px] h-[28px]" alt="icon">
             </a>
-            <p class="font-semibold">Search Results</p>
+            <p class="font-semibold">Hasil Pencarian</p>
             <div class="dummy-btn w-12"></div>
         </div>
 
         <div id="Header" class="relative flex items-center justify-between gap-2 px-5 mt-[18px]">
             <div class="flex flex-col gap-[6px]">
-                <h1 class="text-[20px]">Search Result</h1>
-                <p class="text-[#606060] text-[12px]">{{ $products->count() }} Menus Available</p>
+                <h1 class="text-[20px]">Hasil Pencarian</h1>
+                <p class="text-[#606060] text-[12px]">{{ $products->count() }} Menu Tersedia</p>
             </div>
         </div>
 
