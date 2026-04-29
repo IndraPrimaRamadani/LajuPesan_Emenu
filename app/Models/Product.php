@@ -19,7 +19,6 @@ class Product extends Model
         'name',
         'description',
         'price',
-        'rating',
         'is_popular'
     ];
 

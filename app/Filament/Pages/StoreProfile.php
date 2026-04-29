@@ -36,7 +36,6 @@ class StoreProfile extends Page implements HasForms
 
         $this->form->fill([
             'logo' => $user->logo,
-            'name' => $user->name,
             'address' => $user->address,
             'google_maps_link' => $user->google_maps_link,
             'phone' => $user->phone,
@@ -63,10 +62,6 @@ class StoreProfile extends Page implements HasForms
                             ->label('Logo Toko')
                             ->image()
                             ->columnSpanFull(),
-                        Forms\Components\TextInput::make('name')
-                            ->label('Nama Toko')
-                            ->required()
-                            ->maxLength(255),
                         Forms\Components\Textarea::make('address')
                             ->label('Alamat Lengkap')
                             ->rows(3)
@@ -135,7 +130,6 @@ class StoreProfile extends Page implements HasForms
 
         $user->update([
             'logo' => $data['logo'],
-            'name' => $data['name'],
             'address' => $data['address'],
             'google_maps_link' => $data['google_maps_link'],
             'phone' => $data['phone'],

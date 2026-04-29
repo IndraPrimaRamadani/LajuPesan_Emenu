@@ -30,6 +30,11 @@ class TransactionResource extends Resource
     protected static ?string $pluralModelLabel = 'Transaksi';
     protected static ?string $slug = 'transaksi';
 
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
 
     public static function getEloquentQuery(): Builder
     {

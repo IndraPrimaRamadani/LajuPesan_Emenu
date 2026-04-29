@@ -102,9 +102,13 @@
                                 <polyline points="12 6 12 12 16 14" />
                             </svg>
                         </div>
-                        <div class="flex-1 flex flex-col gap-1.5">
-                            <p class="text-[#353535] text-[15px]">Jam Operasional</p>
-                            <div class="flex items-center gap-1.5">
+                        <div class="flex items-center gap-1.5">
+                            @if (
+                                \Carbon\Carbon::parse($store->opening_hours)->format('H:i') === '00:00' &&
+                                    \Carbon\Carbon::parse($store->closing_hours)->format('H:i') === '00:00'
+                            )
+                                <span class="text-[#353535] text-[15px]">24 Jam</span>
+                            @else
                                 <span class="text-[#353535] text-[15px]">
                                     {{ \Carbon\Carbon::parse($store->opening_hours)->format('H:i') }}
                                 </span>
@@ -112,8 +116,9 @@
                                 <span class="text-[#353535] text-[15px]">
                                     {{ \Carbon\Carbon::parse($store->closing_hours)->format('H:i') }}
                                 </span>
-                            </div>
+                            @endif
                         </div>
+
                     </div>
                 </div>
             @endif

@@ -68,6 +68,14 @@
                 <input type="text" name="search" id="search-input"
                     class="appearance-none outline-none w-full font-semibold placeholder:text-ngekos-grey placeholder:font-light"
                     placeholder="Cari menu, dll...">
+                <button type="submit"
+                    class="flex items-center justify-center w-9 h-9 shrink-0 rounded-full bg-[linear-gradient(90deg,#FF923C_0%,#FF801A_100%)] hover:opacity-90 transition-opacity duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
             </label>
         </form>
 
@@ -75,8 +83,7 @@
 
     <div id="Categories" class="relative flex flex-col px-5 mt-[20px]">
         <div class="flex items-end justify-between ">
-            <h1 class="text-[#353535] font-[500] text-lg">Jelajahi Kategori</h1>
-            <a href="#" class="text-[#FF801A] text-sm ">Lihat Semua</a>
+            <h1 class="text-[#353535] font-[500] text-lg">Kategori</h1>
         </div>
 
         <div class="swiper w-full">
@@ -105,7 +112,6 @@
     <div id="Favorites" class="relative flex flex-col px-5 mt-[20px]">
         <div class="flex items-end justify-between">
             <h1 class="text-[#353535] font-[500] text-lg">Menu Favorit</h1>
-            <a href="#" class="text-[#FF801A] text-sm ">Lihat Semua</a>
         </div>
 
         <div class="swiper w-full">
@@ -161,8 +167,8 @@
 
     <div id="Recomendations" class="relative flex flex-col px-5 mt-[20px]">
         <div class="flex items-end justify-between ">
-            <h1 class="text-[#353535] font-[500] text-lg">Rekomendasi Chef</h1>
-            <a href="#" class="text-[#FF801A] text-sm ">Lihat Semua</a>
+            <h1 class="text-[#353535] font-[500] text-lg">Rekomendasi</h1>
+            <a href="{{ route('product.find-result', $store->username) }}" class="text-[#FF801A] text-sm ">Lihat Semua</a>
         </div>
         <div class="flex flex-col gap-4 mt-[10px]">
 

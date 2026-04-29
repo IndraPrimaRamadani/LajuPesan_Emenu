@@ -104,12 +104,6 @@ class ProductResource extends Resource
                     ->label('Harga Menu')
                     ->numeric()
                     ->required(),
-                Forms\Components\TextInput::make('rating')
-                    ->label('Rating Menu')
-                    ->numeric()
-                    ->minValue(1)
-                    ->maxValue(5)
-                    ->required(),
                 Forms\Components\Toggle::make('is_popular')
                     ->label('Populer Menu')
                     ->required(),
