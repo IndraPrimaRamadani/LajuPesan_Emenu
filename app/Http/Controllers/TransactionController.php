@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Transaction;
 use App\Models\Product;
+use App\Events\TransactionStatusUpdated;
 use App\Models\ProductReview;
 
 class TransactionController extends Controller
@@ -58,7 +59,7 @@ class TransactionController extends Controller
             'status' => 'pending',
         ]);
 
-        foreach ($carts as $cart) {
+                foreach ($carts as $cart) {
           $product = Product::where('id', $cart['id'])->first();
             $transaction->transactionDetails()->create([
                 'product_id' => $product->id,
@@ -66,7 +67,11 @@ class TransactionController extends Controller
                 'note' => $cart['notes'],
             ]);
         }
+
+        TransactionStatusUpdated::dispatch($transaction);
+
         if ($request->payment_method == 'cash') {
+
             return redirect()->route('success', ['username' => $store->username, 'order_id' => $transaction->code]);
         } else {
             //Atur Kunci Server Merchant Anda
@@ -109,9 +114,9 @@ class TransactionController extends Controller
 
         $store = $transaction->user;
 
-        // Update status ke success hanya untuk pembayaran non-tunai (Midtrans)
         if ($transaction->payment_method !== 'cash' && $transaction->status !== 'success') {
             $transaction->update(['status' => 'success']);
+            TransactionStatusUpdated::dispatch($transaction);
         }
 
         return view('pages.success', compact('transaction', 'store'));

@@ -26,6 +26,8 @@ class ProductResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Produk';
     protected static ?string $slug = 'produk';
+    protected static ?string $modelLabel = 'Produk';
+
 
     protected static ?string $navigationGroup = 'Manajemen Menu';
 
@@ -121,7 +123,6 @@ class ProductResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->poll('5s')
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Nama Toko')

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\TransactionStatusUpdated;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
@@ -60,6 +61,9 @@ class MidtransController extends Controller
             $transaction->update(['status' => 'failed']);
             break;
         }
+
+        TransactionStatusUpdated::dispatch($transaction);
+
 
         return response()->json(['message' => 'Transaction updated successfully']);
     }

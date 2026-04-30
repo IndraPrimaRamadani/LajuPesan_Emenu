@@ -72,9 +72,9 @@ class SubscriptionResource extends Resource
 
                         Forms\Components\Select::make('status')
                             ->options([
-                                'pending' => 'Pending',
-                                'success' => 'Success',
-                                'failed' => 'Failed'
+                                'pending' => 'Menunggu',
+                                'success' => 'Berhasil',
+                                'failed' => 'Gagal'
                             ])
                             ->required()
                             ->label('Status Pembayaran')
@@ -89,7 +89,6 @@ class SubscriptionResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->poll('5s')
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Nama Toko')
@@ -107,7 +106,13 @@ class SubscriptionResource extends Resource
                     ->label('Status Pembayaran'),
                 Tables\Columns\TextColumn::make('subscriptionPayment.status')
                     ->label('Status Pembayaran')
-                    ->badge() // Menggunakan badge agar lebih rapi
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'pending' => 'Menunggu',
+                        'success' => 'Berhasil',
+                        'failed' => 'Gagal',
+                        default => $state,
+                    })
+                    ->badge()
                     ->color(fn(string $state): string => match ($state) {
                         'pending' => 'warning',
                         'success' => 'success',

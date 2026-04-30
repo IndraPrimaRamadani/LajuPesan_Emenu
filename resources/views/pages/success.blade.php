@@ -7,12 +7,12 @@
                 <div class="w-full flex flex-col rounded-[8px] border border-[#F1F2F6] p-5 gap-6 bg-white mt-6">
                     <div class="flex flex-col items-center gap-2">
                         <img src="{{ asset('assets/images/icons/Success.svg') }}" alt="success" class="w-24 h-24">
-                        <p class="text-[26px] font-[500] text-center">Successful Transaction
-                            Show this to the cashier</p>
+                        <p class="text-[26px] font-[500] text-center">Transaksi Berhasil
+                            Tunjukkan ini ke kasir</p>
                     </div>
 
                     <div class="flex flex-col gap-2">
-                        <p class="font-semibold">Order Details</p>
+                        <p class="font-semibold">Detail Pesanan</p>
 
                         @foreach ($transaction->transactionDetails as $transactionDetail)
                         <div class="flex flex-col gap-4 mt-[10px]">
@@ -44,7 +44,7 @@
                     </div>
 
                     <div class="flex flex-col gap-2">
-                        <p class="font-semibold">Your Code Order</p>
+                        <p class="font-semibold">Kode Pesanan Anda</p>
                         <label
                             class="flex items-center w-full rounded-[8px] p-[14px_20px] gap-3 bg-white ring-1 ring-[#F3AF003D] ring-opacity-5 focus-within:ring-[#F3AF00] focus-within:ring-opacity-100 transition-all duration-300">
                             <img src="{{ asset('assets/images/icons/Document.svg') }}" class="w-5 h-5 flex shrink-0" alt="icon">
@@ -58,7 +58,7 @@
 
             <a href="{{ route('index', $store->username) }}?from=success"
                 class="flex justify-center rounded-full p-[14px_28px] bg-[#FF801A] font-normal text-white mt-6">
-                See More Menu
+                Lihat Menu Lainnya
             </a>
 
 </div>
