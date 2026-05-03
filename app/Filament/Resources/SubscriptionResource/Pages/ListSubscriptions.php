@@ -5,6 +5,7 @@ namespace App\Filament\Resources\SubscriptionResource\Pages;
 use App\Filament\Resources\SubscriptionResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Support\Facades\Auth;
 
 class ListSubscriptions extends ListRecords
 {
@@ -15,7 +16,15 @@ class ListSubscriptions extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->label('Buat Langganan'),
+        ];
+    }
 
+    protected function getListeners(): array
+    {
+        $storeId = Auth::id();
+
+        return [
+            "echo:store.{$storeId},SubscriptionPaymentUpdated" => '$refresh',
         ];
     }
 }

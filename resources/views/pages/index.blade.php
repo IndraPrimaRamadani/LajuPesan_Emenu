@@ -2,10 +2,10 @@
 
 @section('content')
     <div id="Background"
-        class="absolute top-0 w-full h-[170px] rounded-b-[45px] bg-[linear-gradient(90deg,#FF923C_0%,#FF801A_100%)]">
+        class="absolute top-0 w-full h-[200px] rounded-b-[45px] bg-[linear-gradient(90deg,#FF923C_0%,#FF801A_100%)]">
     </div>
 
-    <div id="TopNav" class="relative flex flex-col px-5 mt-[20px] h-[170px]">
+    <div id="TopNav" class="relative flex flex-col px-5 mt-[20px] h-[200px]">
         <div class="relative flex items-center justify-between">
             <div class="flex flex-col gap-1">
                 <p class="text-white text-sm">Selamat Datang di,</p>
@@ -16,19 +16,20 @@
                     class="w-12 h-12 flex items-center justify-center shrink-0 rounded-full bg-white bg-opacity-20">
                     <img src="{{ asset('assets/images/icons/ic_bell.svg') }}" class="w-[28px] h-[28px]" alt="icon">
                 </button>
-                @if (isset($unratedTransactions) && $unratedTransactions->count() > 0)
-                    <div
-                        class="absolute top-0 right-0 w-[18px] h-[18px] rounded-full bg-[#FF001A] flex items-center justify-center pointer-events-none z-10 border-2 border-white">
-                        <span
-                            class="text-white text-[9px] font-bold leading-none">{{ $unratedTransactions->count() }}</span>
-                    </div>
-                @endif
 
-                {{-- Notification Dropdown --}}
-                @if (isset($unratedTransactions) && $unratedTransactions->count() > 0)
-                    <div id="notification-dropdown"
-                        class="hidden absolute right-0 top-12 w-max min-w-[150px] max-w-[250px] bg-white rounded-[12px] shadow-2xl z-50 overflow-hidden border border-[#F1F2F6]">
-                        <div class="max-h-[250px] overflow-y-auto">
+                {{-- Badge counter - selalu dirender, hidden jika kosong --}}
+                <div id="notification-badge"
+                    class="absolute top-0 right-0 w-[18px] h-[18px] rounded-full bg-[#FF001A] flex items-center justify-center pointer-events-none z-10 border-2 border-white"
+                    style="{{ (isset($unratedTransactions) && $unratedTransactions->count() > 0) ? '' : 'display:none' }}">
+                    <span id="notification-count"
+                        class="text-white text-[9px] font-bold leading-none">{{ isset($unratedTransactions) ? $unratedTransactions->count() : 0 }}</span>
+                </div>
+
+                {{-- Notification Dropdown - selalu dirender --}}
+                <div id="notification-dropdown"
+                    class="hidden absolute right-0 top-12 w-max min-w-[150px] max-w-[250px] bg-white rounded-[12px] shadow-2xl z-50 overflow-hidden border border-[#F1F2F6]">
+                    <div id="notification-list" class="max-h-[250px] overflow-y-auto">
+                        @if (isset($unratedTransactions) && $unratedTransactions->count() > 0)
                             @foreach ($unratedTransactions as $trx)
                                 <a href="{{ route('rating', ['username' => $store->username, 'transaction_code' => $trx->code]) }}"
                                     class="flex items-center gap-3 px-4 py-2 hover:bg-[#FFF7ED] border-b border-[#F1F2F6] transition-colors">
@@ -52,9 +53,9 @@
                                     </svg>
                                 </a>
                             @endforeach
-                        </div>
+                        @endif
                     </div>
-                @endif
+                </div>
             </div>
         </div>
 
@@ -249,5 +250,43 @@
                 window.history.replaceState({}, '', window.location.pathname);
             }
         });
+        // Data transaksi milik pengunjung ini (dari cookie)
+        var myTransactionIds = @json($userTransactions ?? []).map(Number);
+
+        // Realtime: notif rating muncul otomatis tanpa reload
+        var echoInterval = setInterval(function() {
+            if (window.Echo) {
+                clearInterval(echoInterval);
+                window.Echo.channel('store.{{ $store->id }}')
+                    .listen('TransactionStatusUpdated', (data) => {
+                        if (data.status === 'success' && myTransactionIds.includes(Number(data.transaction_id))) {
+                            // Tampilkan toast
+                            showToast('Pembayaran ' + data.code + ' Berhasil! Beri rating ⭐');
+
+                            // Update badge counter
+                            var badge = document.getElementById('notification-badge');
+                            var countEl = document.getElementById('notification-count');
+                            var currentCount = parseInt(countEl.textContent) || 0;
+                            countEl.textContent = currentCount + 1;
+                            badge.style.display = 'flex';
+
+                            // Tambah item ke dropdown
+                            var list = document.getElementById('notification-list');
+                            var ratingUrl = '/{{ $store->username }}/rating/' + data.code;
+                            var newItem = document.createElement('a');
+                            newItem.href = ratingUrl;
+                            newItem.className = 'flex items-center gap-3 px-4 py-2 hover:bg-[#FFF7ED] border-b border-[#F1F2F6] transition-colors';
+                            newItem.innerHTML = '<div class="w-8 h-8 rounded-full bg-[#FFF7ED] flex items-center justify-center shrink-0"><svg class="w-4 h-4 text-[#F97316]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg></div><div class="flex-1 min-w-0"><p class="text-[#353535] text-sm font-medium truncate leading-tight">' + data.code + '</p><p class="text-[#888] text-xs leading-tight">Beri rating pesanan Anda ⭐</p></div><svg class="w-4 h-4 text-[#ccc]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6" /></svg>';
+                            list.insertBefore(newItem, list.firstChild);
+
+                            // Auto-buka dropdown
+                            var dropdown = document.getElementById('notification-dropdown');
+                            if (dropdown) {
+                                dropdown.classList.remove('hidden');
+                            }
+                        }
+                    });
+            }
+        }, 500);
     </script>
 @endsection

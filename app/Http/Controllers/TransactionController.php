@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use App\Models\Product;
 use App\Events\TransactionStatusUpdated;
 use App\Models\ProductReview;
+use Illuminate\Support\Facades\Cookie;
 
 class TransactionController extends Controller
 {
@@ -118,6 +119,16 @@ class TransactionController extends Controller
             $transaction->update(['status' => 'success']);
             TransactionStatusUpdated::dispatch($transaction);
         }
+
+         // Ambil daftar ID transaksi dari HP ini (jika ada)
+    $userTransactions = json_decode(request()->cookie('user_transactions', '[]'), true);
+
+    // Jika ID transaksi saat ini belum tersimpan di HP ini, maka simpan
+    if (!in_array($transaction->id, $userTransactions)) {
+        $userTransactions[] = $transaction->id;
+        // Simpan ke cookie selama 30 hari (43200 menit)
+        Cookie::queue('user_transactions', json_encode($userTransactions), 43200);
+    }
 
         return view('pages.success', compact('transaction', 'store'));
     }

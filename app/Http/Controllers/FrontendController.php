@@ -20,14 +20,18 @@ class FrontendController extends Controller
         $populars = Product::where('user_id', $store->id)->where('is_popular', true)->get();
         $products = Product::where('user_id', $store->id)->where('is_popular', false)->get();
 
+        // Ambil daftar ID pesanan khusus dari HP/Browser ini saja
+        $userTransactions = json_decode($request->cookie('user_transactions', '[]'), true);
+
         // Ambil transaksi yang belum di-rating (status success, belum rated)
         $unratedTransactions = \App\Models\Transaction::where('user_id', $store->id)
             ->where('status', 'success')
             ->where('is_rated', false)
+            ->whereIn('id', $userTransactions)
             ->latest()
             ->get();
 
-        return view('pages.index', compact('store', 'populars', 'products', 'unratedTransactions'));
+        return view('pages.index', compact('store', 'populars', 'products', 'unratedTransactions', 'userTransactions'));
     }
 
     public function profile(Request $request)

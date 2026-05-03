@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\SubscriptionResource\Pages;
 
 use App\Filament\Resources\SubscriptionResource;
+use App\Events\SubscriptionPaymentUpdated;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
@@ -19,5 +20,10 @@ class EditSubscription extends EditRecord
     {
         return [
         ];
+    }
+
+    protected function afterSave(): void
+    {
+        SubscriptionPaymentUpdated::dispatch($this->record);
     }
 }

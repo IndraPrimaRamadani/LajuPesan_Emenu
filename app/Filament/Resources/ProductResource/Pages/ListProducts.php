@@ -40,7 +40,13 @@ class ListProducts extends ListRecords
                 ->label('Buat Produk'),
         ];
     }
+
+    protected function getListeners(): array
+    {
+        $storeId = Auth::id();
+
+        return [
+            "echo:store.{$storeId},SubscriptionPaymentUpdated" => '$refresh',
+        ];
+    }
 }
-
-
-
