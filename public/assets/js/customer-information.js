@@ -70,10 +70,56 @@ const cartData = document.getElementById('cart-data');
 paymentForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
     cartData.value = JSON.stringify(cart);
 
-    paymentForm.submit();
+    // Cek metode pembayaran
+    const paymentMethod = document.querySelector('input[name="payment_method"]:checked');
+    
+    if (!paymentMethod) {
+        alert('Silakan pilih metode pembayaran');
+        return;
+    }
 
-    localStorage.removeItem("cart");
+    if (paymentMethod.value === 'cash') {
+        // Untuk pembayaran tunai, submit form biasa
+        paymentForm.submit();
+        localStorage.removeItem("cart");
+    } else {
+        // Untuk Midtrans, kirim via AJAX dan buka Snap Popup
+        const formData = new FormData(paymentForm);
+        
+        fetch(paymentForm.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Buka Snap Popup
+            window.snap.pay(data.snap_token, {
+                onSuccess: function(result) {
+                    localStorage.removeItem("cart");
+                    window.location.href = data.success_url;
+                },
+                onPending: function(result) {
+                    // Pembayaran belum selesai (misal: QRIS ditampilkan tapi belum dibayar)
+                    window.location.href = data.failed_url;
+                },
+                onError: function(result) {
+                    window.location.href = data.failed_url;
+                },
+                onClose: function() {
+                    // Pelanggan menekan tombol close/leave this page
+                    window.location.href = data.failed_url;
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan, silakan coba lagi.');
+        });
+    }
 });

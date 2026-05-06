@@ -91,17 +91,15 @@ class TransactionController extends Controller
                     'first_name' => $request->name,
                     'phone' => $request->phone_number,
                 ],
-                'callbacks' => [
-                    'finish' => route('success', ['username' => $store->username, 'order_id' => $transaction->code]),
-                ],
-
             ];
 
-            $paymentUrl = \Midtrans\Snap::createTransaction($params)->redirect_url;
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
             
-            return redirect($paymentUrl);
-            
-            
+            return response()->json([
+                'snap_token' => $snapToken,
+                'success_url' => route('success', ['username' => $store->username, 'order_id' => $transaction->code]),
+                'failed_url' => route('failed', ['username' => $store->username, 'order_id' => $transaction->code]),
+            ]);
         }
     }
 
@@ -131,6 +129,24 @@ class TransactionController extends Controller
     }
 
         return view('pages.success', compact('transaction', 'store'));
+    }
+
+    public function failed(Request $request)
+    {
+        $transaction = Transaction::where('code', $request->order_id)->first();
+
+        if (!$transaction) {
+            abort(404);
+        }
+
+        $store = $transaction->user;
+
+        if ($transaction->status === 'pending') {
+            $transaction->update(['status' => 'failed']);
+            TransactionStatusUpdated::dispatch($transaction);
+        }
+
+        return view('pages.failed', compact('transaction', 'store'));
     }
 
     public function rating(Request $request)

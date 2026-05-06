@@ -34,6 +34,9 @@ class ListTransactions extends ListRecords
         $code = $data['code'] ?? '';
         $status = $data['status'] ?? '';
 
+        // Auto-refresh tabel agar data terbaru langsung muncul
+        $this->resetTable();
+
         if ($status === 'pending') {
             Notification::make()
                 ->title('🔔 Pesanan Baru Masuk!')
@@ -41,9 +44,16 @@ class ListTransactions extends ListRecords
                 ->success()
                 ->duration(10000)
                 ->send();
+        } elseif ($status === 'failed') {
+            Notification::make()
+                ->title('❌ Pembayaran Gagal')
+                ->body("Transaksi {$code} - Pelanggan membatalkan pembayaran")
+                ->danger()
+                ->duration(10000)
+                ->send();
         } else {
             Notification::make()
-                ->title('Pembayaran Berhasil')
+                ->title('✅ Pembayaran Berhasil')
                 ->body("Transaksi {$code} - Status: " . ucfirst($status))
                 ->info()
                 ->send();

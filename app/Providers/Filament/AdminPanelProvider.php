@@ -37,6 +37,10 @@ class AdminPanelProvider extends PanelProvider
                 'panels::head.end',
                 fn () => \Illuminate\Support\Facades\Blade::render("@vite('resources/js/app.js')")
             )
+            ->renderHook(
+                'panels::body.end',
+                fn () => request()->routeIs('filament.admin.pages.dashboard') ? \Illuminate\Support\Facades\Blade::render('<x-whatsapp-button />') : ''
+            )
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
