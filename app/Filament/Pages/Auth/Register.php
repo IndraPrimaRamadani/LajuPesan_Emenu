@@ -19,16 +19,18 @@ class Register extends BaseRegister
         $this->callHook('afterValidate');
 
         $this->callHook('beforeRegister');
+        /** @var \App\Models\User $user */
         $user = $this->handleRegistration($data);
         $this->callHook('afterRegister');
 
-        // Logout the user so they are redirected to login
-        Auth::guard(Filament::getAuthGuard())->logout();
+        // Login user agar bisa akses halaman verifikasi
+        Auth::guard(Filament::getAuthGuard())->login($user);
 
-        session()->flush();
-        session()->regenerate();
+        // Kirim email verifikasi otomatis
+        $user->sendEmailVerificationNotification();
 
-        $this->redirect(Filament::getLoginUrl());
+        // Redirect ke halaman verifikasi email
+        $this->redirect(route('filament.admin.auth.email-verification.prompt'));
 
         return null;
     }
@@ -64,7 +66,7 @@ class Register extends BaseRegister
         ->label('Username')
         ->hint('Minimal 5 karakter, tidak boleh ada spasi.')
         ->required()
-        ->minLength(5)
+        ->rules(['min:5'])
         ->unique($this->getUserModel());
     }
 }

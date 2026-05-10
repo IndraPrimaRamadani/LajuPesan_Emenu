@@ -19,6 +19,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Widgets\DashboardOverview;
 use App\Filament\Pages\Auth\Register;
+use App\Filament\Pages\Auth\EmailVerificationPrompt;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -30,6 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->registration(Register::class)
+            ->emailVerification(EmailVerificationPrompt::class)
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -39,7 +41,14 @@ class AdminPanelProvider extends PanelProvider
             )
             ->renderHook(
                 'panels::body.end',
-                fn () => request()->routeIs('filament.admin.pages.dashboard') ? \Illuminate\Support\Facades\Blade::render('<x-whatsapp-button />') : ''
+                function () {
+                    /** @var \App\Models\User|null $user */
+                    $user = request()->user();
+                    
+                    return request()->routeIs('filament.admin.pages.dashboard') && $user?->role === 'store' 
+                        ? \Illuminate\Support\Facades\Blade::render('<x-whatsapp-button />') 
+                        : '';
+                }
             )
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

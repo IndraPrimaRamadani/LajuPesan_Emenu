@@ -22,7 +22,7 @@ class DashboardOverview extends BaseWidget
 
         if (Auth::user()->role === 'admin') {
             return [
-                Stat::make('Total Pengguna', User::count()),
+                Stat::make('Total Pengguna', User::where('role', 'store')->count()),
                 Stat::make('Total Pendapatan Langganan', 'Rp ' . number_format(SubscriptionPayment::where('status', 'success')->count() * 50000)),
                 Stat::make('Total Produk', Product::count()),
             ];
