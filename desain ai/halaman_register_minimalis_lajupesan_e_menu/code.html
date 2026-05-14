@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Daftar - LajuPesan E-Menu</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Work+Sans:wght@500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-container": "#72300a",
+                      "secondary": "#545f73",
+                      "outline-variant": "#d8c3ad",
+                      "surface-variant": "#e0e3e5",
+                      "surface-container-lowest": "#ffffff",
+                      "on-secondary-fixed": "#111c2d",
+                      "tertiary-fixed-dim": "#ffb693",
+                      "on-secondary-fixed-variant": "#3c475a",
+                      "on-primary-fixed-variant": "#653e00",
+                      "surface-container": "#eceef0",
+                      "secondary-fixed-dim": "#bcc7de",
+                      "on-tertiary-fixed-variant": "#76330d",
+                      "inverse-on-surface": "#eff1f3",
+                      "surface-container-low": "#f2f4f6",
+                      "on-error-container": "#93000a",
+                      "inverse-surface": "#2d3133",
+                      "tertiary-fixed": "#ffdbcc",
+                      "on-tertiary": "#ffffff",
+                      "secondary-container": "#d5e0f8",
+                      "on-surface": "#191c1e",
+                      "primary-fixed-dim": "#ffb95f",
+                      "primary-fixed": "#ffddb8",
+                      "error": "#ba1a1a",
+                      "primary": "#855300",
+                      "on-primary": "#ffffff",
+                      "surface-container-high": "#e6e8ea",
+                      "inverse-primary": "#ffb95f",
+                      "surface-tint": "#855300",
+                      "outline": "#867461",
+                      "on-surface-variant": "#534434",
+                      "tertiary-container": "#f79a6c",
+                      "tertiary": "#944a23",
+                      "surface-container-highest": "#e0e3e5",
+                      "background": "#f7f9fb",
+                      "on-background": "#191c1e",
+                      "on-tertiary-fixed": "#351000",
+                      "on-error": "#ffffff",
+                      "primary-container": "#f59e0b",
+                      "error-container": "#ffdad6",
+                      "on-secondary-container": "#586377",
+                      "on-primary-fixed": "#2a1700",
+                      "surface": "#f7f9fb",
+                      "secondary-fixed": "#d8e3fb",
+                      "on-primary-container": "#613b00",
+                      "surface-dim": "#d8dadc",
+                      "surface-bright": "#f7f9fb",
+                      "on-secondary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "8px",
+                      "xs": "4px",
+                      "container-margin-mobile": "16px",
+                      "md": "16px",
+                      "base": "4px",
+                      "lg": "24px",
+                      "xl": "40px",
+                      "gutter": "16px",
+                      "container-margin-desktop": "10%"
+              },
+              "fontFamily": {
+                      "headline-sm": ["Inter"],
+                      "label-sm": ["Work Sans"],
+                      "price-display": ["Inter"],
+                      "body-md": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "label-lg": ["Work Sans"],
+                      "body-lg": ["Inter"],
+                      "headline-md": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "price-display": ["18px", {"lineHeight": "24px", "fontWeight": "700"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+        .glass-nav {
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+        }
+        .soft-shadow {
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+        }
+        .focus-amber:focus-within {
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md">
+<!-- Top Navigation (Shell suppressed for Transactional - using minimalist brand header) -->
+<header class="w-full h-16 glass-nav fixed top-0 z-50 flex items-center px-container-margin-mobile md:px-container-margin-desktop border-b border-outline-variant/30">
+<div class="font-headline-md text-headline-md font-bold text-primary">
+            LajuPesan E-Menu
+        </div>
+</header>
+<main class="flex-grow flex flex-col md:flex-row pt-16 h-screen">
+<!-- Left: Register Form Container -->
+<section class="w-full md:w-1/2 flex items-center justify-center p-md md:p-xl overflow-y-auto">
+<div class="w-full max-w-md space-y-lg py-xl">
+<!-- Branding & Title -->
+<div class="space-y-sm">
+<h1 class="font-display-lg text-display-lg text-on-surface">Mulai Bisnis Anda</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Buat akun untuk bergabung dengan platform E-Menu kami.</p>
+</div>
+<!-- Registration Form -->
+<form class="space-y-md"><div class="space-y-base"><label class="font-label-lg text-label-lg text-on-surface-variant">Logo Toko</label><div class="flex items-center justify-center w-full"><label class="flex flex-col items-center justify-center w-full h-32 border-2 border-outline-variant/50 border-dashed rounded-xl cursor-pointer bg-white hover:bg-surface-container-low transition-colors"><div class="flex flex-col items-center justify-center pt-5 pb-6"><span class="material-symbols-outlined text-on-surface-variant/60 mb-2" data-icon="cloud_upload">cloud_upload</span><p class="text-sm text-on-surface-variant/60"><span class="font-semibold">Klik untuk unggah</span> atau seret dan lepas</p><p class="text-xs text-on-surface-variant/40">PNG, JPG atau JPEG (Maks. 2MB)</p></div><input accept="image/*" class="hidden" type="file"/></label></div></div>
+<!-- Owner Name -->
+<!-- Business Name -->
+<div class="space-y-base">
+<label class="font-label-lg text-label-lg text-on-surface-variant">Nama Toko</label>
+<div class="relative flex items-center group focus-amber rounded-xl border border-outline-variant/50 bg-white transition-all">
+<span class="material-symbols-outlined absolute left-md text-on-surface-variant/60" data-icon="store">store</span>
+<input class="w-full pl-12 pr-md py-md bg-transparent border-none focus:ring-0 rounded-xl font-body-md" placeholder="Masukkan nama toko Anda" required="" type="text"/>
+</div>
+</div><div class="space-y-base"><label class="font-label-lg text-label-lg text-on-surface-variant">Username</label><div class="relative flex items-center group focus-amber rounded-xl border border-outline-variant/50 bg-white transition-all"><span class="material-symbols-outlined absolute left-md text-on-surface-variant/60" data-icon="alternate_email">alternate_email</span><input class="w-full pl-12 pr-md py-md bg-transparent border-none focus:ring-0 rounded-xl font-body-md" placeholder="pilih_username_unik" required="" type="text"/></div><p class="text-label-sm text-on-surface-variant/70 mt-1 ml-1">Minimal 5 karakter, tidak boleh ada spasi.</p></div>
+<!-- Email Address -->
+<div class="space-y-base">
+<label class="font-label-lg text-label-lg text-on-surface-variant">Alamat Email</label>
+<div class="relative flex items-center group focus-amber rounded-xl border border-outline-variant/50 bg-white transition-all">
+<span class="material-symbols-outlined absolute left-md text-on-surface-variant/60" data-icon="mail">mail</span>
+<input class="w-full pl-12 pr-md py-md bg-transparent border-none focus:ring-0 rounded-xl font-body-md" placeholder="email@bisnisanda.com" required="" type="email"/>
+</div>
+</div>
+<!-- Password -->
+<div class="space-y-base">
+<label class="font-label-lg text-label-lg text-on-surface-variant">Kata Sandi</label>
+<div class="relative flex items-center group focus-amber rounded-xl border border-outline-variant/50 bg-white transition-all">
+<span class="material-symbols-outlined absolute left-md text-on-surface-variant/60" data-icon="lock">lock</span>
+<input class="w-full pl-12 pr-md py-md bg-transparent border-none focus:ring-0 rounded-xl font-body-md" placeholder="Min. 8 karakter" required="" type="password"/>
+</div>
+</div>
+<!-- Confirm Password -->
+<div class="space-y-base">
+<label class="font-label-lg text-label-lg text-on-surface-variant">Konfirmasi Kata Sandi</label>
+<div class="relative flex items-center group focus-amber rounded-xl border border-outline-variant/50 bg-white transition-all">
+<span class="material-symbols-outlined absolute left-md text-on-surface-variant/60" data-icon="lock">lock</span>
+<input class="w-full pl-12 pr-md py-md bg-transparent border-none focus:ring-0 rounded-xl font-body-md" placeholder="Ulangi kata sandi" required="" type="password"/>
+</div>
+</div>
+<!-- Terms Checkbox -->
+<!-- Register Button -->
+<button class="w-full bg-primary-container text-on-primary-container font-headline-sm py-md rounded-full shadow-lg active:scale-95 transition-all duration-150 mt-sm" type="submit">
+                        Daftar Sekarang
+                    </button>
+</form>
+<!-- Footer Link -->
+<div class="text-center pt-md">
+<p class="font-body-md text-on-surface-variant">
+                        Sudah punya akun? <a class="text-primary font-bold hover:underline" href="#">Masuk di sini</a>
+</p>
+</div>
+</div>
+</section>
+<!-- Right: Decorative Hero Image (Desktop Only) -->
+<section class="hidden md:block md:w-1/2 relative overflow-hidden">
+<img alt="Premium Culinary Experience" class="w-full h-full object-cover" data-alt="A highly detailed close-up shot of an elegant, premium restaurant table setting with gourmet dishes arranged beautifully. The scene features warm, soft amber lighting that creates an inviting and luxurious atmosphere. Subtle steam rises from a fresh dish in the foreground, highlighting textures of premium ceramic plates and polished silverware. The overall aesthetic is clean and modern, following a high-key palette that complements the amber brand colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAY8QKr2DKzSqlQzuRMbfJPospaunASvpBMXGQJBYcQ_uq9lvmKJtOaEIqdrSs8ILdH9CXCdVzcR-C1Hi2c74w3XR_stRz6xykhF64tdTTl5fEg2016F86rngSQ9aE_wcGZkO8_InXFBmvx_kx9y_TKDtsXTbTfoJH3wM2QaNeBdoyroRA_3VEmbe1syRrdMqXKMHXyMDKQJsb7li-GMOmZHJpfVGDDbuJNGTEqalodm4nbcXTBbjDhbyBc81whQt4h6-JO2PWAYmg"/>
+<!-- Overlay Texture -->
+<div class="absolute inset-0 bg-primary/10 mix-blend-multiply"></div>
+<div class="absolute bottom-xl left-xl right-xl p-lg bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl max-w-sm">
+<div class="flex items-center gap-md">
+<div class="bg-primary-container p-sm rounded-lg text-on-primary-container">
+<span class="material-symbols-outlined" data-icon="restaurant_menu">restaurant_menu</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-on-surface">Digitalize Your Menu</h3>
+<p class="font-body-md text-on-surface-variant">Tingkatkan efisiensi layanan restoran Anda hari ini.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Simple Footer (Transactional suppression applies to standard navigation, but small legal footer remains) -->
+<footer class="w-full py-md px-container-margin-mobile md:px-container-margin-desktop bg-background border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-sm">
+<p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 LajuPesan E-Menu. Premium Dining Experience.</p>
+</footer>
+</body></html>

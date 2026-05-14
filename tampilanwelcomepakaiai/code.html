@@ -3,7 +3,7 @@
 <html class="light" lang="id"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
-<title>LajuPesan</title>
+<title>LajuPesan - Modernisasi Bisnis F&amp;B</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -126,12 +126,13 @@
           0 20px 50px rgba(0,0,0,0.15);
       }
       body {
-        min-height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
       }
     </style>
 </head>
 <body class="bg-surface text-on-background font-body-md selection:bg-amber-accent/30 flex flex-col items-center">
-<main class="relative w-full max-w-[480px] min-h-screen bg-radial-depth flex flex-col px-container-padding">
+<main class="relative w-full max-w-[480px] h-screen bg-radial-depth flex flex-col px-container-padding overflow-hidden">
 <!-- Header Section -->
 <header class="w-full h-16 flex items-center justify-center shrink-0">
 <h1 class="font-headline-md text-[24px] text-primary tracking-tightest">LajuPesan</h1>
@@ -180,15 +181,20 @@
 <!-- Footer / CTA Section -->
 <footer class="w-full flex flex-col gap-6 py-8 z-20 shrink-0">
 <div class="flex flex-col gap-3.5">
-<a href="{{ filament()->getLoginUrl() }}" class="w-full h-[60px] bg-amber-accent hover:bg-[#E59200] text-white font-button-text text-lg rounded-2xl shadow-[0px_12px_24px_-8px_rgba(245,158,11,0.5)] flex items-center justify-center gap-3 active:scale-[0.98] transition-all">
-                    Mulai Sekarang
+<button class="w-full h-[60px] bg-amber-accent hover:bg-[#E59200] text-white font-button-text text-lg rounded-2xl shadow-[0px_12px_24px_-8px_rgba(245,158,11,0.5)] flex items-center justify-center gap-3 active:scale-[0.98] transition-all">
+                    Daftar Sekarang
                     <span class="material-symbols-outlined text-[22px]">arrow_forward</span>
-</a>
+</button>
 <p class="text-center font-label-md text-label-md text-on-surface-variant/80 px-4">
                     Gratis selamanya untuk 5 produk pertama. Upgrade kapan saja.
                 </p>
 </div>
-
+<div class="flex justify-center pb-safe">
+<button class="flex items-center gap-1.5 font-button-text text-button-text text-primary hover:text-amber-accent transition-colors">
+                    Sudah punya akun? 
+                    <span class="font-bold underline decoration-primary/40 underline-offset-4">Masuk Merchant</span>
+</button>
+</div>
 </footer>
 </main>
 <style>

@@ -8,6 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OtpVerificationMail;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -31,6 +34,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
         'opening_hours',
         'closing_hours',
+        'otp_code',
+        'otp_expires_at',
     ];
 
     /**
@@ -41,6 +46,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
+        'otp_code',
     ];
 
     /**
@@ -52,6 +58,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
+            'otp_expires_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -65,6 +72,59 @@ class User extends Authenticatable implements MustVerifyEmail
                 $model->role = 'store';
             });
         }
+    }
+
+    /**
+     * Generate a 6-digit OTP code, hash it, and save to database.
+     * Returns the plain OTP code (for sending via email).
+     */
+    public function generateOtp(): string
+    {
+        $plainOtp = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        $this->otp_code = Hash::make($plainOtp);
+        $this->otp_expires_at = now()->addMinutes(10);
+        $this->save();
+
+        return $plainOtp;
+    }
+
+    /**
+     * Verify the given OTP code against the stored hash.
+     * Returns true if valid and not expired.
+     */
+    public function verifyOtp(string $code): bool
+    {
+        if (!$this->otp_code || !$this->otp_expires_at) {
+            return false;
+        }
+
+        if ($this->otp_expires_at->isPast()) {
+            return false;
+        }
+
+        return Hash::check($code, $this->otp_code);
+    }
+
+    /**
+     * Clear the OTP code and expiry after successful verification.
+     */
+    public function clearOtp(): void
+    {
+        $this->otp_code = null;
+        $this->otp_expires_at = null;
+        $this->save();
+    }
+
+    /**
+     * Override Laravel's default email verification notification.
+     * Instead of sending a link, we generate an OTP and send it via email.
+     */
+    public function sendEmailVerificationNotification(): void
+    {
+        $plainOtp = $this->generateOtp();
+
+        Mail::to($this->email)->queue(new OtpVerificationMail($this->name, $plainOtp));
     }
 
     public function productCategories()

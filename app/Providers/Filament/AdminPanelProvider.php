@@ -29,9 +29,10 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            ->login(\App\Filament\Pages\Auth\Login::class)
             ->registration(Register::class)
             ->emailVerification(EmailVerificationPrompt::class)
+            ->passwordReset(\App\Filament\Pages\Auth\CustomPasswordReset::class)
             ->colors([
                 'primary' => Color::Amber,
             ])
