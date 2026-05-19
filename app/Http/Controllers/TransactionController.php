@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Transaction;
 use App\Models\Product;
 use App\Events\TransactionStatusUpdated;
+use App\Jobs\AutoFailCashTransaction;
 use App\Models\ProductReview;
 use Illuminate\Support\Facades\Cookie;
 
@@ -72,6 +73,8 @@ class TransactionController extends Controller
         TransactionStatusUpdated::dispatch($transaction);
 
         if ($request->payment_method == 'cash') {
+            // Jadwalkan auto-gagal dalam 5 menit jika kasir tidak mengubah status
+            AutoFailCashTransaction::dispatch($transaction->id)->delay(now()->addMinutes(5));
 
             return redirect()->route('success', ['username' => $store->username, 'order_id' => $transaction->code]);
         } else {
@@ -91,14 +94,24 @@ class TransactionController extends Controller
                     'first_name' => $request->name,
                     'phone' => $request->phone_number,
                 ],
+                'expiry' => [
+                    'start_time' => date("Y-m-d H:i:s O"),
+                    'unit' => 'minute',
+                    'duration' => 5,
+                ],
             ];
 
             $snapToken = \Midtrans\Snap::getSnapToken($params);
+            
+            // Jadwalkan auto-gagal dalam 5 menit jika pembayaran belum diselesaikan
+            AutoFailCashTransaction::dispatch($transaction->id)->delay(now()->addMinutes(5));
             
             return response()->json([
                 'snap_token' => $snapToken,
                 'success_url' => route('success', ['username' => $store->username, 'order_id' => $transaction->code]),
                 'failed_url' => route('failed', ['username' => $store->username, 'order_id' => $transaction->code]),
+                'customer_info_url' => route('customer-information', ['username' => $store->username]),
+                'cancel_url' => route('transaction.cancel', ['username' => $store->username, 'order_id' => $transaction->code]),
             ]);
         }
     }
@@ -147,6 +160,23 @@ class TransactionController extends Controller
         }
 
         return view('pages.failed', compact('transaction', 'store'));
+    }
+
+    public function cancelTransaction(Request $request)
+    {
+        $transaction = Transaction::where('code', $request->order_id)->first();
+
+        if (!$transaction) {
+            return response()->json(['status' => 'not_found'], 404);
+        }
+
+        // Hanya batalkan jika masih pending
+        if ($transaction->status === 'pending') {
+            $transaction->transactionDetails()->delete();
+            $transaction->delete();
+        }
+
+        return response()->json(['status' => 'cancelled']);
     }
 
     public function rating(Request $request)

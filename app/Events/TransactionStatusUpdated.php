@@ -30,6 +30,8 @@ class TransactionStatusUpdated implements ShouldBroadcast
             'transaction_id' => $this->transaction->id,
             'code' => $this->transaction->code,
             'status' => $this->transaction->status,
+            'payment_method' => $this->transaction->payment_method,
+            'name' => $this->transaction->name,
         ];
     }
 }

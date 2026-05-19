@@ -7,8 +7,13 @@
                 <div class="w-full flex flex-col rounded-[8px] border border-[#F1F2F6] p-5 gap-6 bg-white mt-6">
                     <div class="flex flex-col items-center gap-2">
                         <img src="{{ asset('assets/images/icons/Success.svg') }}" alt="success" class="w-24 h-24">
-                        <p class="text-[26px] font-[500] text-center">Transaksi Berhasil
-                            Tunjukkan ini ke kasir</p>
+                        <p class="text-[26px] font-[500] text-center">
+                            @if ($transaction->payment_method == 'midtrans')
+                                Pembayaran Berhasil, Silakan Tunggu di Meja
+                            @else
+                                Transaksi Berhasil Tunjukkan ini ke kasir
+                            @endif
+                        </p>
                     </div>
 
                     <div class="flex flex-col gap-2">
@@ -57,7 +62,7 @@
                 </div>
             </div>
 
-            <a href="{{ route('index', $store->username) }}?from=success"
+            <a href="{{ route('index', $store->username) }}"
                 class="flex justify-center rounded-full p-[14px_28px] bg-[#FF801A] font-normal text-white mt-6">
                 Lihat Menu Lainnya
             </a>

@@ -1,6 +1,104 @@
 @extends('layouts.app')
 
 @section('content')
+    <style>
+        .notif-dropdown {
+            position: absolute;
+            right: 0;
+            top: 56px;
+            width: 200px;
+            z-index: 50;
+            font-family: 'Poppins', sans-serif;
+        }
+        .notif-arrow {
+            position: absolute;
+            top: -6px;
+            right: 18px;
+            width: 12px;
+            height: 12px;
+            background-color: #ffffff;
+            transform: rotate(45deg);
+            box-shadow: -3px -3px 5px rgba(0, 0, 0, 0.03);
+            border-left: 1px solid #f1f2f6;
+            border-top: 1px solid #f1f2f6;
+            z-index: 51;
+        }
+        .notif-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f2f6;
+            overflow: hidden;
+            position: relative;
+            z-index: 52;
+        }
+        .notif-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 14px;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+        .notif-item:hover {
+            background-color: #FFF7ED;
+        }
+        .notif-item:not(:last-child) {
+            border-bottom: 1px solid #f1f2f6;
+        }
+        .notif-icon-star {
+            width: 18px;
+            height: 18px;
+            color: #888888;
+            flex-shrink: 0;
+        }
+        .notif-content {
+            flex: 1;
+            min-width: 0;
+        }
+        .notif-code {
+            color: #353535;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0;
+            line-height: 1.2;
+        }
+        .notif-desc {
+            color: #888888;
+            font-size: 11.5px;
+            line-height: 1.3;
+            margin: 2px 0 0 0;
+        }
+        .notif-arrow-right {
+            width: 12px;
+            height: 12px;
+            color: #cccccc;
+            flex-shrink: 0;
+        }
+        .header-title {
+            color: #ffffff;
+            font-weight: 600;
+            margin-top: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            line-height: 24px;
+            max-width: 70%;
+        }
+        .mobile-br {
+            display: block;
+        }
+        @media (min-width: 640px) {
+            .header-title {
+                font-size: 24px;
+                line-height: 30px;
+                max-width: 100%;
+            }
+            .mobile-br {
+                display: none;
+            }
+        }
+    </style>
+
     <div id="Background"
         class="absolute top-0 w-full h-[200px] rounded-b-[45px] bg-[linear-gradient(90deg,#FF923C_0%,#FF801A_100%)]">
     </div>
@@ -25,41 +123,42 @@
                         class="text-white text-[9px] font-bold leading-none">{{ isset($unratedTransactions) ? $unratedTransactions->count() : 0 }}</span>
                 </div>
 
-                {{-- Notification Dropdown - selalu dirender --}}
-                <div id="notification-dropdown"
-                    class="hidden absolute right-0 top-12 w-max min-w-[150px] max-w-[250px] bg-white rounded-[12px] shadow-2xl z-50 overflow-hidden border border-[#F1F2F6]">
-                    <div id="notification-list" class="max-h-[250px] overflow-y-auto">
-                        @if (isset($unratedTransactions) && $unratedTransactions->count() > 0)
-                            @foreach ($unratedTransactions as $trx)
-                                <a href="{{ route('rating', ['username' => $store->username, 'transaction_code' => $trx->code]) }}"
-                                    class="flex items-center gap-3 px-4 py-2 hover:bg-[#FFF7ED] border-b border-[#F1F2F6] transition-colors">
-                                    <div
-                                        class="w-8 h-8 rounded-full bg-[#FFF7ED] flex items-center justify-center shrink-0">
-                                        <svg class="w-4 h-4 text-[#F97316]" fill="none" stroke="currentColor"
-                                            stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"
+                {{-- Notification Dropdown --}}
+                <div id="notification-dropdown" class="hidden notif-dropdown">
+                    {{-- Arrow pointing to bell --}}
+                    <div class="notif-arrow"></div>
+                    <div class="notif-card">
+                        <div id="notification-list" class="max-h-[250px] overflow-y-auto">
+                            @if (isset($unratedTransactions) && $unratedTransactions->count() > 0)
+                                @foreach ($unratedTransactions as $trx)
+                                    <a href="{{ route('rating', ['username' => $store->username, 'transaction_code' => $trx->code]) }}"
+                                        class="notif-item">
+                                        <svg class="notif-icon-star" fill="none" stroke="currentColor"
+                                            stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round"
                                             stroke-linejoin="round">
                                             <polygon
                                                 points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                                         </svg>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-[#353535] text-sm font-medium truncate leading-tight">
-                                            {{ $trx->code }}</p>
-                                        <p class="text-[#888] text-xs leading-tight">Beri rating pesanan Anda ⭐</p>
-                                    </div>
-                                    <svg class="w-4 h-4 text-[#ccc]" fill="none" stroke="currentColor" stroke-width="2"
-                                        viewBox="0 0 24 24">
-                                        <polyline points="9 18 15 12 9 6" />
-                                    </svg>
-                                </a>
-                            @endforeach
-                        @endif
+                                        <div class="notif-content">
+                                            <p class="notif-code">{{ $trx->code }}</p>
+                                            <p class="notif-desc">Beri rating<br>pesanan Anda ⭐</p>
+                                        </div>
+                                        <svg class="notif-arrow-right" fill="none" stroke="currentColor" stroke-width="2"
+                                            viewBox="0 0 24 24">
+                                            <polyline points="9 18 15 12 9 6" />
+                                        </svg>
+                                    </a>
+                                @endforeach
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <h1 class="text-white font-[600] text-2xl leading-[30px] mt-[20px]">Pesan menu pilihanmu di sini!</h1>
+        <h1 class="header-title">
+            Pesan menu pilihanmu <br class="mobile-br"> di sini!
+        </h1>
 
         <form action="{{ route('product.find-result', $store->username) }}" method="GET"
             class="absolute bottom-0 left-0 right-0 w-full gap-2 px-5">
@@ -214,6 +313,15 @@
 @section('script')
     <script>
         function toggleNotification() {
+            const badge = document.getElementById('notification-badge');
+            const countEl = document.getElementById('notification-count');
+            const count = parseInt(countEl ? countEl.textContent : '0') || 0;
+
+            // Jika jumlah notifikasi adalah 0 atau badge disembunyikan, lonceng tidak bisa diklik
+            if (count === 0 || (badge && badge.style.display === 'none')) {
+                return;
+            }
+
             const dropdown = document.getElementById('notification-dropdown');
             if (dropdown) {
                 dropdown.classList.toggle('hidden');
@@ -244,7 +352,6 @@
                 if (dropdown) {
                     dropdown.classList.remove('hidden');
                 }
-                showToast('Pesanan berhasil! Beri rating pesanan Anda ⭐');
 
                 // Hapus query param dari URL agar tidak terbuka ulang saat refresh
                 window.history.replaceState({}, '', window.location.pathname);
@@ -260,9 +367,6 @@
                 window.Echo.channel('store.{{ $store->id }}')
                     .listen('TransactionStatusUpdated', (data) => {
                         if (data.status === 'success' && myTransactionIds.includes(Number(data.transaction_id))) {
-                            // Tampilkan toast
-                            showToast('Pembayaran ' + data.code + ' Berhasil! Beri rating ⭐');
-
                             // Update badge counter
                             var badge = document.getElementById('notification-badge');
                             var countEl = document.getElementById('notification-count');
@@ -275,8 +379,8 @@
                             var ratingUrl = '/{{ $store->username }}/rating/' + data.code;
                             var newItem = document.createElement('a');
                             newItem.href = ratingUrl;
-                            newItem.className = 'flex items-center gap-3 px-4 py-2 hover:bg-[#FFF7ED] border-b border-[#F1F2F6] transition-colors';
-                            newItem.innerHTML = '<div class="w-8 h-8 rounded-full bg-[#FFF7ED] flex items-center justify-center shrink-0"><svg class="w-4 h-4 text-[#F97316]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg></div><div class="flex-1 min-w-0"><p class="text-[#353535] text-sm font-medium truncate leading-tight">' + data.code + '</p><p class="text-[#888] text-xs leading-tight">Beri rating pesanan Anda ⭐</p></div><svg class="w-4 h-4 text-[#ccc]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6" /></svg>';
+                            newItem.className = 'notif-item';
+                            newItem.innerHTML = '<svg class="notif-icon-star" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg><div class="notif-content"><p class="notif-code">' + data.code + '</p><p class="notif-desc">Beri rating<br>pesanan Anda ⭐</p></div><svg class="notif-arrow-right" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6" /></svg>';
                             list.insertBefore(newItem, list.firstChild);
 
                             // Auto-buka dropdown

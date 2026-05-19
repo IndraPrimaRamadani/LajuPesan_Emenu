@@ -67,6 +67,10 @@ function calculateTotal() {
 const paymentForm = document.getElementById('Form');
 const cartData = document.getElementById('cart-data');
 
+const submitBtn = document.getElementById('submitBtn');
+const btnText = document.getElementById('btnText');
+const btnSpinner = document.getElementById('btnSpinner');
+
 paymentForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -78,6 +82,12 @@ paymentForm.addEventListener('submit', (event) => {
     if (!paymentMethod) {
         alert('Silakan pilih metode pembayaran');
         return;
+    }
+
+    submitBtn.disabled = true;
+    if (btnText && btnSpinner) {
+        btnText.classList.add('hidden');
+        btnSpinner.classList.remove('hidden');
     }
 
     if (paymentMethod.value === 'cash') {
@@ -112,14 +122,30 @@ paymentForm.addEventListener('submit', (event) => {
                     window.location.href = data.failed_url;
                 },
                 onClose: function() {
-                    // Pelanggan menekan tombol close/leave this page
-                    window.location.href = data.failed_url;
+                    // Pelanggan menekan tombol X, batalkan transaksi dan kembali ke halaman informasi pelanggan
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    fetch(data.cancel_url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                    }).finally(() => {
+                        window.location.href = data.customer_info_url;
+                    });
                 }
             });
         })
         .catch(error => {
             console.error('Error:', error);
             alert('Terjadi kesalahan, silakan coba lagi.');
+            
+            submitBtn.disabled = false;
+            if (btnText && btnSpinner) {
+                btnText.classList.remove('hidden');
+                btnSpinner.classList.add('hidden');
+            }
         });
     }
 });

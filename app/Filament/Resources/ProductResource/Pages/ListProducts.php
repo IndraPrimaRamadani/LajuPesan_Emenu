@@ -35,7 +35,7 @@ class ListProducts extends ListRecords
                 ->label('Produk kamu melebihi batas penggunaan gratis, silahkan berlangganan')
                 ->color('danger')
                 ->icon('heroicon-o-exclamation-triangle')
-                ->visible(!$subscription && $countProduct >= 2),
+                ->visible(!$subscription && $countProduct >= 5),
             Actions\CreateAction::make()
                 ->label('Buat Produk'),
         ];
