@@ -29,6 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->brandName(fn () => \Illuminate\Support\Facades\Auth::user()?->name ?? 'LajuPesan')
             ->login(\App\Filament\Pages\Auth\Login::class)
             ->registration(Register::class)
             ->emailVerification(EmailVerificationPrompt::class)

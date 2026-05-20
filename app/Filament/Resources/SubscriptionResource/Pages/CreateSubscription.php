@@ -9,4 +9,12 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateSubscription extends CreateRecord
 {
     protected static string $resource = SubscriptionResource::class;
+
+    protected function getFormActions(): array
+    {
+        return [
+            $this->getCreateFormAction(),
+            $this->getCancelFormAction(),
+        ];
+    }
 }

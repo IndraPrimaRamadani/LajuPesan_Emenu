@@ -68,7 +68,10 @@ class SubscriptionResource extends Resource
                         Forms\Components\FileUpload::make('proof')
                             ->label('Bukti Transfer Ke Rekening 5920185705 (BCA) A/N INDRA PRIMA RAMADANI Sebesar Rp. 50.000')
                             ->required()
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->openable()
+                            ->downloadable()
+                            ->deletable(false),
 
                         Forms\Components\Select::make('status')
                             ->options([
@@ -83,6 +86,7 @@ class SubscriptionResource extends Resource
                     ])
                     ->columnSpanFull()
                     ->addable(false)
+                    ->deletable(false)
             ]);
     }
 
