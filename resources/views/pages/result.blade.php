@@ -2,17 +2,17 @@
 
 @section('content')
     <div id="TopNav" class="relative flex items-center justify-between px-5 py-3 bg-white">
-            <a href="{{ route('index', $store->username) }}"
+            <a href="{{ route('product.find', $store->username) }}"
                 class="w-12 h-12 flex items-center justify-center shrink-0 rounded-full overflow-hidden bg-[#F0F1F3]">
                 <img src="{{ asset('assets/images/icons/Arrow - Left.svg') }}" class="w-[28px] h-[28px]" alt="icon">
             </a>
-            <p class="font-semibold">Hasil Pencarian</p>
+            <p class="font-semibold">{{ request('search') || request('category') ? 'Hasil Pencarian' : 'Semua Menu' }}</p>
             <div class="dummy-btn w-12"></div>
         </div>
 
         <div id="Header" class="relative flex items-center justify-between gap-2 px-5 mt-[18px]">
             <div class="flex flex-col gap-[6px]">
-                <h1 class="text-[20px]">Hasil Pencarian</h1>
+                <h1 class="text-[20px]">{{ request('search') || request('category') ? 'Hasil Pencarian' : 'Semua Menu' }}</h1>
                 <p class="text-[#606060] text-[12px]">{{ $products->count() }} Menu Tersedia</p>
             </div>
         </div>
@@ -20,7 +20,7 @@
         <!-- search result -->
         <div id="SearchResult" class="flex flex-col gap-4 mt-[10px] px-5">
             @foreach ($products as $product)
-            <a href="" class="card">
+            <a href="{{ route('product.show', ['username' => $store->username, 'id' => $product->id]) }}" class="card">
                 <div
                     class="flex rounded-[8px] border border-[#F1F2F6] p-[12px] gap-4 bg-white hover:bg-[#FFF7F0] hover:border-[1px] hover:border-[#F3AF00] transition-all duration-300">
                     <div class="w-[128px] h-[88px]">

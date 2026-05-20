@@ -39,7 +39,15 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->renderHook(
                 'panels::head.end',
-                fn () => \Illuminate\Support\Facades\Blade::render("@vite('resources/js/app.js')")
+                fn () => \Illuminate\Support\Facades\Blade::render("
+                    @vite('resources/js/app.js')
+                    <style>
+                        /* Sembunyikan hanya scrollbar vertikal */
+                        ::-webkit-scrollbar:vertical {
+                            display: none !important;
+                        }
+                    </style>
+                ")
             )
             ->renderHook(
                 'panels::body.end',

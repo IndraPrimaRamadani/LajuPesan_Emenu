@@ -3,7 +3,7 @@
 @section('content')
     <div id="TopNavAbsolute"
             class="absolute top-0 left-0 right-0 flex items-center justify-between w-full px-5 py-3 z-10 bg-gradient-to-b from-black/80 to-transparent">
-            <a href="{{ route('index', $store->username) }}"
+            <a href="javascript:history.back()"
                 class="w-12 h-12 flex items-center justify-center shrink-0 rounded-full overflow-hidden bg-white/10">
                 <img src="{{ asset('assets/images/icons/Arrow - Left.svg') }}" class="w-8 h-8" alt="icon">
             </a>
@@ -103,7 +103,7 @@
                 </div>
 
                 <button type="button"
-                    class="flex justify-center rounded-full p-[14px_28px] bg-[#FF801A] font-normal text-white"
+                    class="flex justify-center items-center rounded-full px-5 py-3 bg-[#FF801A] font-medium text-white text-sm whitespace-nowrap shrink-0"
                     data-id="{{ $product->id }}" onclick="addToCart(this.dataset.id)">
                     Tambah ke Keranjang
                 </button>

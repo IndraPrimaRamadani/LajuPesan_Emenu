@@ -56,7 +56,8 @@ class TransactionResource extends Resource
                     ->relationship('user', 'name')
                     ->required()
                     ->reactive()
-                    ->hidden(fn() => Auth::user()->role === 'store'),
+                    ->hidden(fn() => Auth::user()->role === 'store')
+                    ->disabledOn('edit'),
                 Forms\Components\TextInput::make('code')
                     ->label('Kode Transaksi')
                     ->default(fn(): string => 'TRX-' . mt_rand(10000, 99999))
@@ -64,20 +65,24 @@ class TransactionResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->label('Nama Pelanggan')
-                    ->required(),
+                    ->required()
+                    ->disabledOn('edit'),
                 Forms\Components\TextInput::make('phone_number')
                     ->label('Nomor Telepon')
-                    ->required(),
+                    ->required()
+                    ->disabledOn('edit'),
                 Forms\Components\TextInput::make('table_number')
                     ->label('Nomer Meja')
-                    ->required(),
+                    ->required()
+                    ->disabledOn('edit'),
                 Forms\Components\Select::make('payment_method')
                     ->label('Metode Pembayaran')
                     ->options([
                         'cash' => 'Tunai',
                         'midtrans' => 'Non Tunai'
                     ])
-                    ->required(),
+                    ->required()
+                    ->disabledOn('edit'),
                 Forms\Components\Select::make('status')
                     ->label('Status Pembayaran')
                     ->options([
@@ -119,7 +124,8 @@ class TransactionResource extends Resource
                     ->afterStateUpdated(function (Get $get, Set $set) {
                         self::updateTotals($get, $set);
                     })
-                    ->reorderable(false),
+                    ->reorderable(false)
+                    ->disabledOn('edit'),
                 Forms\Components\TextInput::make('total_price')
                     ->label('Total Harga')
                     ->required()
