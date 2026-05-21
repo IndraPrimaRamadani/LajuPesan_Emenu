@@ -41,6 +41,7 @@ class AdminPanelProvider extends PanelProvider
                 'panels::head.end',
                 fn () => \Illuminate\Support\Facades\Blade::render("
                     @vite('resources/js/app.js')
+                    <link rel=\"icon\" type=\"image/png\" href=\"{{ asset('images/logolajupesan.png') }}\">
                     <style>
                         /* Sembunyikan hanya scrollbar vertikal */
                         ::-webkit-scrollbar:vertical {
