@@ -120,6 +120,16 @@
             box-shadow: none !important;
             transition: all 0.2s ease-in-out;
         }
+        .fi-input-wrp input, 
+        .fi-input-wrp select, 
+        .fi-input-wrp textarea {
+            color: #191c1e !important;
+        }
+        .fi-input-wrp input::placeholder, 
+        .fi-input-wrp select::placeholder, 
+        .fi-input-wrp textarea::placeholder {
+            color: #867461 !important;
+        }
         .fi-input-wrp:focus-within {
             border-color: #f59e0b !important;
             box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.1) !important;
