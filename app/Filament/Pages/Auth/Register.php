@@ -28,8 +28,21 @@ class Register extends BaseRegister
         // Login user agar bisa akses halaman verifikasi
         Auth::guard(Filament::getAuthGuard())->login($user);
 
-        // Kirim email verifikasi otomatis
-        $user->sendEmailVerificationNotification();
+        // Kirim email verifikasi otomatis dengan penanganan error yang aman (resilient)
+        try {
+            $user->sendEmailVerificationNotification();
+        } catch (\Throwable $e) {
+            // Log error untuk analisis
+            \Illuminate\Support\Facades\Log::error('Gagal mengirim email verifikasi saat registrasi: ' . $e->getMessage());
+
+            // Tampilkan notifikasi peringatan tanpa menggagalkan pendaftaran
+            \Filament\Notifications\Notification::make()
+                ->title('Pendaftaran berhasil, tetapi gagal mengirim email OTP.')
+                ->body('Terjadi kendala pada server email. Silakan coba klik "Kirim Ulang Kode" di halaman verifikasi.')
+                ->warning()
+                ->persistent()
+                ->send();
+        }
 
         // Redirect ke halaman verifikasi email
         $this->redirect(route('filament.admin.auth.email-verification.prompt'));
