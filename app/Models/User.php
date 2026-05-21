@@ -126,7 +126,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     {
         $plainOtp = $this->generateOtp();
 
-        Mail::to($this->email)->queue(new OtpVerificationMail($this->name, $plainOtp));
+        Mail::to($this->email)->send(new OtpVerificationMail($this->name, $plainOtp));
     }
 
     public function productCategories()

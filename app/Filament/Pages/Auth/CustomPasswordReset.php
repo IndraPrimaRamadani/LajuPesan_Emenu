@@ -46,14 +46,26 @@ class CustomPasswordReset extends SimplePage
 
         // Kirim OTP melalui Email
         $user = User::where('email', $this->email)->first();
-        \Illuminate\Support\Facades\Mail::to($this->email)
-            ->queue(new \App\Mail\PasswordResetOtpMail($user->name, $generatedOtp));
         
-        Notification::make()
-            ->title('OTP Terkirim')
-            ->body('Kode OTP telah dikirim ke email Anda. Silakan cek inbox.')
-            ->success()
-            ->send();
+        try {
+            \Illuminate\Support\Facades\Mail::to($this->email)
+                ->send(new \App\Mail\PasswordResetOtpMail($user->name, $generatedOtp));
+            
+            Notification::make()
+                ->title('OTP Terkirim')
+                ->body('Kode OTP telah dikirim ke email Anda. Silakan cek inbox.')
+                ->success()
+                ->send();
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Gagal mengirim email reset password OTP: ' . $e->getMessage());
+
+            Notification::make()
+                ->title('Gagal mengirim kode OTP')
+                ->body('Terjadi kendala koneksi dengan server email. Silakan hubungi admin atau coba beberapa saat lagi.')
+                ->danger()
+                ->persistent()
+                ->send();
+        }
     }
 
     public function resetPassword()
