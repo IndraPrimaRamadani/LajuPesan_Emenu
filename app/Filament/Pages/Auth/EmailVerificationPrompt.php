@@ -98,25 +98,14 @@ class EmailVerificationPrompt extends BasePrompt
 
         RateLimiter::hit($rateLimitKey, 60);
 
-        // Generate new OTP and send email dengan try-catch resilient
-        try {
-            $user->sendEmailVerificationNotification();
+        // Generate new OTP and send email
+        $user->sendEmailVerificationNotification();
 
-            Notification::make()
-                ->title('Kode OTP baru telah dikirim!')
-                ->body('Periksa inbox email Anda.')
-                ->success()
-                ->send();
-        } catch (\Throwable $e) {
-            // Log error untuk analisis
-            \Illuminate\Support\Facades\Log::error('Gagal mengirim ulang email OTP: ' . $e->getMessage());
-
-            Notification::make()
-                ->title('Gagal mengirim ulang kode OTP.')
-                ->body('Terjadi kendala koneksi dengan server email. Silakan periksa pengaturan SMTP di Railway Anda.')
-                ->danger()
-                ->send();
-        }
+        Notification::make()
+            ->title('Kode OTP baru telah dikirim!')
+            ->body('Periksa inbox email Anda.')
+            ->success()
+            ->send();
 
         $this->otp = '';
     }

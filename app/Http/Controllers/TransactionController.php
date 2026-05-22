@@ -132,7 +132,7 @@ class TransactionController extends Controller
         }
 
          // Ambil daftar ID transaksi dari HP ini (jika ada)
-    $userTransactions = json_decode(request()->cookie('user_transactions', '[]'), true);
+    $userTransactions = json_decode($request->cookie('user_transactions', '[]'), true);
 
     // Jika ID transaksi saat ini belum tersimpan di HP ini, maka simpan
     if (!in_array($transaction->id, $userTransactions)) {

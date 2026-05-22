@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <title>LajuPesan</title>
-<link rel="icon" type="image/png" href="{{ asset('images/logolajupesan.png') }}">
+<link rel="icon" type="image/png" href="{{ asset('assets/images/logolajupesan.png') }}">
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
