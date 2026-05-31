@@ -12,6 +12,8 @@ use Filament\Http\Responses\Auth\Contracts\RegistrationResponse;
 
 class Register extends BaseRegister
 {
+    protected static string $view = 'filament.pages.auth.register';
+
     public function register(): ?RegistrationResponse
     {
         $this->callHook('beforeValidate');
@@ -52,21 +54,66 @@ class Register extends BaseRegister
             ];
     }
 
+    public function getRegisterFormAction(): \Filament\Actions\Action
+    {
+        return parent::getRegisterFormAction()
+            ->label('Daftar Sekarang');
+    }
+
     protected function getLogoFormComponent(): Component
     {
         return FileUpload::make('logo')
         ->label('Logo Toko')
+        ->validationAttribute('logo toko')
         ->image()
         ->required();
+    }
+
+    protected function getNameFormComponent(): Component
+    {
+        return parent::getNameFormComponent()
+            ->label('Nama Toko')
+            ->validationAttribute('nama toko')
+            ->placeholder('Masukkan nama toko Anda')
+            ->prefixIcon('heroicon-o-building-storefront');
     }
 
     protected function getUsernameFormComponent(): Component
     {
         return TextInput::make('username')
         ->label('Username')
+        ->placeholder('pilih_username_unik')
+        ->prefixIcon('heroicon-o-at-symbol')
         ->hint('Minimal 5 karakter, tidak boleh ada spasi.')
         ->required()
         ->rules(['min:5'])
         ->unique($this->getUserModel());
+    }
+
+    protected function getEmailFormComponent(): Component
+    {
+        return parent::getEmailFormComponent()
+            ->label('Alamat Email')
+            ->validationAttribute('alamat email')
+            ->placeholder('email@bisnisanda.com')
+            ->prefixIcon('heroicon-o-envelope');
+    }
+
+    protected function getPasswordFormComponent(): Component
+    {
+        return parent::getPasswordFormComponent()
+            ->label('Kata Sandi')
+            ->validationAttribute('kata sandi')
+            ->placeholder('Min. 8 karakter')
+            ->prefixIcon('heroicon-o-lock-closed');
+    }
+
+    protected function getPasswordConfirmationFormComponent(): Component
+    {
+        return parent::getPasswordConfirmationFormComponent()
+            ->label('Konfirmasi Kata Sandi')
+            ->validationAttribute('konfirmasi kata sandi')
+            ->placeholder('Ulangi kata sandi')
+            ->prefixIcon('heroicon-o-lock-closed');
     }
 }

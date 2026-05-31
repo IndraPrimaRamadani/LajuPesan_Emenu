@@ -66,8 +66,8 @@
                                 class="flex items-center w-full rounded-[8px] p-[14px_20px] gap-3 bg-white ring-1 ring-[#F3AF003D] ring-opacity-5 focus-within:ring-[#F3AF00] focus-within:ring-opacity-100 transition-all duration-300">
                                 <img src="{{ asset('assets/images/icons/Document.svg') }}" class="w-5 h-5 flex shrink-0" alt="icon">
                                 <input type="text" name="name" id=""
-                                    class="appearance-none outline-none w-full font-regular placeholder:text-ngekos-grey placeholder:font-light"
-                                    placeholder="Masukkan nama Anda..." required>
+                                    class="appearance-none outline-none w-full font-regular placeholder:text-ngekos-grey placeholder:font-light placeholder:text-sm"
+                                    placeholder="Masukkan nama..." required>
                             </label>
                         </div>
 
@@ -77,8 +77,8 @@
                                 class="flex items-center w-full rounded-[8px] p-[14px_20px] gap-3 bg-white ring-1 ring-[#F3AF003D] ring-opacity-5 focus-within:ring-[#F3AF00] focus-within:ring-opacity-100 transition-all duration-300">
                                 <img src="{{ asset('assets/images/icons/Call.svg') }}" class="w-5 h-5 flex shrink-0" alt="icon">
                                 <input type="text" name="phone_number" id=""
-                                    class="appearance-none outline-none w-full font-regular placeholder:text-ngekos-grey placeholder:font-light"
-                                    placeholder="Masukkan nomor HP Anda..." required>
+                                    class="appearance-none outline-none w-full font-regular placeholder:text-ngekos-grey placeholder:font-light placeholder:text-sm"
+                                    placeholder="Masukkan nomor HP..." required>
                             </label>
                         </div>
 
@@ -88,8 +88,8 @@
                                 class="flex items-center w-full rounded-[8px] p-[14px_20px] gap-3 bg-white ring-1 ring-[#F3AF003D] ring-opacity-5 focus-within:ring-[#F3AF00] focus-within:ring-opacity-100 transition-all duration-300">
                                 <img src="{{ asset('assets/images/icons/Document.svg') }}" class="w-5 h-5 flex shrink-0" alt="icon">
                                 <input type="text" name="table_number" id=""
-                                    class="appearance-none outline-none w-full font-regular placeholder:text-ngekos-grey placeholder:font-light"
-                                    placeholder="Masukkan nomor meja Anda..." required>
+                                    class="appearance-none outline-none w-full font-regular placeholder:text-ngekos-grey placeholder:font-light placeholder:text-sm"
+                                    placeholder="Masukkan nomor meja..." required>
                             </label>
                         </div>
                     </div>
@@ -130,9 +130,13 @@
                         </p>
                     </div>
 
-                    <button type="submit"
-                        class="flex justify-center rounded-full p-[14px_28px] bg-[#FF801A] font-normal text-white">
-                        Bayar
+                    <button type="submit" id="submitBtn"
+                        class="flex items-center justify-center rounded-full p-[14px_28px] bg-[#FF801A] font-normal text-white disabled:opacity-75 disabled:cursor-not-allowed min-w-[100px]">
+                        <span id="btnText">Bayar</span>
+                        <svg id="btnSpinner" class="hidden w-5 h-5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
                     </button>
                 </div>
             </div>

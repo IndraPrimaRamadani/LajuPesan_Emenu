@@ -33,30 +33,60 @@ class ListTransactions extends ListRecords
     {
         $code = $data['code'] ?? '';
         $status = $data['status'] ?? '';
+        $paymentMethod = $data['payment_method'] ?? '';
+        $name = $data['name'] ?? '';
 
         // Auto-refresh tabel agar data terbaru langsung muncul
         $this->resetTable();
 
         if ($status === 'pending') {
-            Notification::make()
-                ->title('🔔 Pesanan Baru Masuk!')
-                ->body("Kode transaksi: {$code}")
-                ->success()
-                ->duration(10000)
-                ->send();
+            if ($paymentMethod === 'cash') {
+                Notification::make()
+                    ->title('💵 Pesanan (TUNAI)')
+                    ->body("Nama: {$name}\nKode Transaksi: {$code}")
+                    ->warning()
+                    ->duration(10000)
+                    ->send();
+            } else {
+                Notification::make()
+                    ->title('💳 Pesanan (NON-TUNAI)')
+                    ->body("Nama: {$name}\nKode Transaksi: {$code}")
+                    ->info()
+                    ->duration(10000)
+                    ->send();
+            }
+        } elseif ($status === 'success') {
+            if ($paymentMethod === 'cash') {
+                Notification::make()
+                    ->title('✅ Pembayaran Selesai')
+                    ->body("Nama: {$name}\nKode Transaksi: {$code}")
+                    ->success()
+                    ->duration(10000)
+                    ->send();
+            } else {
+                Notification::make()
+                    ->title('🎉 Pembayaran Non-Tunai SUKSES!')
+                    ->body("Nama: {$name}\nKode Transaksi: {$code}")
+                    ->success()
+                    ->duration(10000)
+                    ->send();
+            }
         } elseif ($status === 'failed') {
-            Notification::make()
-                ->title('❌ Pembayaran Gagal')
-                ->body("Transaksi {$code} - Pelanggan membatalkan pembayaran")
-                ->danger()
-                ->duration(10000)
-                ->send();
-        } else {
-            Notification::make()
-                ->title('✅ Pembayaran Berhasil')
-                ->body("Transaksi {$code} - Status: " . ucfirst($status))
-                ->info()
-                ->send();
+            if ($paymentMethod === 'cash') {
+                Notification::make()
+                    ->title('❌ Pembayaran Tunai Gagal')
+                    ->body("Nama: {$name}\nKode Transaksi: {$code}")
+                    ->danger()
+                    ->duration(10000)
+                    ->send();
+            } else {
+                Notification::make()
+                    ->title('❌ Pembayaran Non-Tunai Gagal')
+                    ->body("Nama: {$name}\nKode Transaksi: {$code}")
+                    ->danger()
+                    ->duration(10000)
+                    ->send();
+            }
         }
     }
 }

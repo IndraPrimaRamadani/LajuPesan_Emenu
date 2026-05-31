@@ -28,24 +28,36 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->path('admin')
-            ->login()
+            ->path('')
+            ->brandName(fn () => \Illuminate\Support\Facades\Auth::user()?->name ?? 'LajuPesan')
+            ->favicon(asset('assets/images/logolajupesan.png'))
+            ->login(\App\Filament\Pages\Auth\Login::class)
             ->registration(Register::class)
             ->emailVerification(EmailVerificationPrompt::class)
+            ->passwordReset(\App\Filament\Pages\Auth\CustomPasswordReset::class)
             ->colors([
                 'primary' => Color::Amber,
             ])
             ->renderHook(
                 'panels::head.end',
-                fn () => \Illuminate\Support\Facades\Blade::render("@vite('resources/js/app.js')")
+                fn () => \Illuminate\Support\Facades\Blade::render("
+                    @vite('resources/js/app.js')
+                    <link rel=\"icon\" type=\"image/png\" href=\"{{ asset('assets/images/logolajupesan.png') }}\">
+                    <style>
+                        /* Sembunyikan hanya scrollbar vertikal */
+                        ::-webkit-scrollbar:vertical {
+                            display: none !important;
+                        }
+                    </style>
+                ")
             )
             ->renderHook(
                 'panels::body.end',
                 function () {
                     /** @var \App\Models\User|null $user */
-                    $user = request()->user();
+                    $user = \Illuminate\Support\Facades\Auth::user();
                     
-                    return request()->routeIs('filament.admin.pages.dashboard') && $user?->role === 'store' 
+                    return \Illuminate\Support\Facades\Request::routeIs('filament.admin.pages.dashboard') && $user?->role === 'store' 
                         ? \Illuminate\Support\Facades\Blade::render('<x-whatsapp-button />') 
                         : '';
                 }

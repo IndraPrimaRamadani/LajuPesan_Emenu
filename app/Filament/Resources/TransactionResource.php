@@ -28,6 +28,7 @@ class TransactionResource extends Resource
     protected static ?string $navigationLabel = 'Manajemen Transaksi';
 
     protected static ?string $pluralModelLabel = 'Transaksi';
+    protected static ?string $modelLabel = 'Transaksi';
     protected static ?string $slug = 'transaksi';
 
     public static function canCreate(): bool
@@ -55,7 +56,8 @@ class TransactionResource extends Resource
                     ->relationship('user', 'name')
                     ->required()
                     ->reactive()
-                    ->hidden(fn() => Auth::user()->role === 'store'),
+                    ->hidden(fn() => Auth::user()->role === 'store')
+                    ->disabledOn('edit'),
                 Forms\Components\TextInput::make('code')
                     ->label('Kode Transaksi')
                     ->default(fn(): string => 'TRX-' . mt_rand(10000, 99999))
@@ -63,20 +65,24 @@ class TransactionResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->label('Nama Pelanggan')
-                    ->required(),
+                    ->required()
+                    ->disabledOn('edit'),
                 Forms\Components\TextInput::make('phone_number')
                     ->label('Nomor Telepon')
-                    ->required(),
+                    ->required()
+                    ->disabledOn('edit'),
                 Forms\Components\TextInput::make('table_number')
                     ->label('Nomer Meja')
-                    ->required(),
+                    ->required()
+                    ->disabledOn('edit'),
                 Forms\Components\Select::make('payment_method')
                     ->label('Metode Pembayaran')
                     ->options([
                         'cash' => 'Tunai',
                         'midtrans' => 'Non Tunai'
                     ])
-                    ->required(),
+                    ->required()
+                    ->disabledOn('edit'),
                 Forms\Components\Select::make('status')
                     ->label('Status Pembayaran')
                     ->options([
@@ -87,9 +93,11 @@ class TransactionResource extends Resource
                     ->required(),
 
                 Forms\Components\Repeater::make('transactionDetails')
+                    ->label('Detail Transaksi')
                     ->relationship()
                     ->schema([
                         Forms\Components\Select::make('product_id')
+                            ->label('Produk')
                             ->relationship('product', 'name')
                             ->options(function (callable $get) {
                                 if (Auth::user()->role === 'admin') {
@@ -103,18 +111,23 @@ class TransactionResource extends Resource
                             })
                             ->required(),
                         Forms\Components\TextInput::make('quantity')
+                            ->label('Jumlah')
                             ->required()
                             ->numeric()
                             ->minValue(1)
                             ->default(1),
-                        Forms\Components\TextInput::make('note'),
+                        Forms\Components\TextInput::make('note')
+                            ->label('Catatan'),
                     ])->columnSpanFull()
+                    ->addActionLabel('Tambahkan ke Detail Transaksi')
                     ->live()
                     ->afterStateUpdated(function (Get $get, Set $set) {
                         self::updateTotals($get, $set);
                     })
-                    ->reorderable(false),
+                    ->reorderable(false)
+                    ->disabledOn('edit'),
                 Forms\Components\TextInput::make('total_price')
+                    ->label('Total Harga')
                     ->required()
                     ->readOnly(),
             ]);
@@ -123,6 +136,7 @@ class TransactionResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Nama Toko')
@@ -170,12 +184,18 @@ class TransactionResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->hidden(fn ($record) => in_array($record->status, ['success', 'failed']) || $record->payment_method === 'midtrans'),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn ($record) => $record->status === 'failed'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                 ]),
-            ]);
+            ])
+            ->recordUrl(fn ($record) => $record->status === 'pending' && $record->payment_method !== 'midtrans'
+                ? TransactionResource::getUrl('edit', ['record' => $record])
+                : null);
     }
 
     public static function getRelations(): array

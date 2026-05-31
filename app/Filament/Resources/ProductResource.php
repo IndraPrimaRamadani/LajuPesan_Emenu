@@ -55,7 +55,7 @@ class ProductResource extends Resource
 
         $countProduct = Product::where('user_id', Auth::user()->id)->count();
 
-        return !($countProduct >= 2 && !$subcription);
+        return !($countProduct >= 5 && !$subcription);
     }
 
     public static function form(Form $form): Form

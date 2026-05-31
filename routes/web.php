@@ -25,5 +25,6 @@ Route::get('/{username}/customer-information', [TransactionController::class, 'c
 Route::post('/{username}/checkout', [TransactionController::class, 'checkout'])->name('payment');
 Route::get('/{username}/success', [TransactionController::class, 'success'])->name('success');
 Route::get('/{username}/failed', [TransactionController::class, 'failed'])->name('failed');
+Route::post('/{username}/cancel-transaction', [TransactionController::class, 'cancelTransaction'])->name('transaction.cancel');
 Route::get('/{username}/rating/{transaction_code}', [TransactionController::class, 'rating'])->name('rating');
 Route::post('/{username}/rating/{transaction_code}', [TransactionController::class, 'submitRating'])->name('rating.submit');

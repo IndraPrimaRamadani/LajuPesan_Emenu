@@ -28,6 +28,10 @@ class Subscription extends Model
             
             $model->end_date = now()->addDays(30);
         });
+
+        static::created(function ($model) {
+            \App\Events\SubscriptionCreated::dispatch($model);
+        });
     }
 
     public function user()

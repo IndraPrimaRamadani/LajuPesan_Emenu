@@ -23,8 +23,14 @@ class ListSubscriptions extends ListRecords
     {
         $storeId = Auth::id();
 
-        return [
+        $listeners = [
             "echo:store.{$storeId},SubscriptionPaymentUpdated" => '$refresh',
         ];
+
+        if (Auth::user()->role === 'admin') {
+            $listeners["echo:admin,SubscriptionCreated"] = '$refresh';
+        }
+
+        return $listeners;
     }
 }

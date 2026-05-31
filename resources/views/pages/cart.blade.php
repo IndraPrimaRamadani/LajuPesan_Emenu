@@ -87,7 +87,7 @@
             </div>
 
             <a href="{{ route('customer-information', $store->username) }}" type="button"
-                class="flex justify-center rounded-full p-[14px_28px] bg-[#FF801A] font-normal text-white">
+                class="flex justify-center items-center rounded-full px-5 py-3 bg-[#FF801A] font-medium text-white text-sm whitespace-nowrap shrink-0">
                 Lanjut Pembayaran
             </a>
         </div>
