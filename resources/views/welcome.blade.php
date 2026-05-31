@@ -130,6 +130,14 @@
         min-height: 100vh;
       }
     </style>
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#F97316">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="LajuPesan">
+    <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
 </head>
 <body class="bg-surface text-on-background font-body-md selection:bg-amber-accent/30 flex flex-col items-center">
 <main class="relative w-full max-w-[480px] min-h-screen bg-radial-depth flex flex-col px-container-padding">
@@ -189,7 +197,6 @@
                     Gratis selamanya untuk 5 produk pertama. Upgrade kapan saja.
                 </p>
 </div>
-
 </footer>
 </main>
 <style>
@@ -207,4 +214,15 @@
             letter-spacing: -0.05em;
         }
     </style>
+
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('SW registered:', reg.scope))
+                    .catch(err => console.log('SW registration failed:', err));
+            });
+        }
+    </script>
 </body></html>
