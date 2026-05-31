@@ -1,13 +1,18 @@
 {
+  "id": "/",
   "name": "LajuPesan - E-Menu Digital",
   "short_name": "LajuPesan",
-  "description": "Aplikasi e-menu digital untuk restoran dan kafe",
+  "description": "Aplikasi e-menu digital untuk restoran dan kafe. Pesan makanan dengan mudah via QR code.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#F97316",
   "orientation": "portrait",
   "scope": "/",
+  "prefer_related_applications": false,
+  "categories": ["food", "business"],
+  "lang": "id",
+  "dir": "ltr",
   "icons": [
     {
       "src": "/icons/icon-72x72.png",
@@ -58,7 +63,20 @@
       "purpose": "maskable"
     }
   ],
-  "categories": ["food", "business"],
-  "lang": "id",
-  "dir": "ltr"
+  "screenshots": [
+    {
+      "src": "/screenshots/screenshot-narrow.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Halaman utama LajuPesan e-menu digital"
+    },
+    {
+      "src": "/screenshots/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Tampilan desktop LajuPesan e-menu digital"
+    }
+  ]
 }
